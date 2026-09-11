@@ -7,25 +7,6 @@
   "input": "./input_schema.json",
   "dockerfile": "./Dockerfile",
   "storages": {
-    "dataset": {
-      "actorSpecification": 1,
-      "views": {
-        "overview": {
-          "title": "Overview",
-          "transformation": {
-            "fields": [
-              "url",
-              "httpStatus",
-              "grade",
-              "score",
-              "types",
-              "errorCount",
-              "warningCount",
-              "finalUrl"
-            ]
-          }
-        }
-      }
-    }
+    "dataset": "./dataset_schema.json"
   }
 }

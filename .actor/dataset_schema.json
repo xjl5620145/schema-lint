@@ -1,5 +1,77 @@
 {
   "actorSpecification": 1,
+  "fields": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "title": "URL",
+        "description": "The original URL that was checked.",
+        "example": "https://example.com"
+      },
+      "finalUrl": {
+        "type": "string",
+        "title": "Final URL",
+        "description": "URL after following redirects.",
+        "example": "https://example.com/"
+      },
+      "httpStatus": {
+        "type": "number",
+        "title": "HTTP status",
+        "description": "HTTP status code of the response.",
+        "example": 200
+      },
+      "grade": {
+        "type": "string",
+        "title": "Grade",
+        "description": "Letter grade from A to F based on the structured-data score.",
+        "example": "A",
+        "enum": ["A", "B", "C", "D", "F"]
+      },
+      "score": {
+        "type": "number",
+        "title": "Score",
+        "description": "Structured-data score from 0 to 100.",
+        "example": 90
+      },
+      "errorCount": {
+        "type": "number",
+        "title": "Errors",
+        "description": "Issues that block Google rich results entirely.",
+        "example": 0
+      },
+      "warningCount": {
+        "type": "number",
+        "title": "Warnings",
+        "description": "Issues that hurt rich-result display but do not block it.",
+        "example": 2
+      },
+      "types": {
+        "type": "array",
+        "title": "Schema types",
+        "description": "All schema.org types detected on the page, including nodes nested in @graph.",
+        "example": ["Product", "Offer", "Brand"]
+      },
+      "jsonLdBlockCount": {
+        "type": "number",
+        "title": "JSON-LD blocks",
+        "description": "Number of application/ld+json script blocks found on the page.",
+        "example": 1
+      },
+      "issues": {
+        "type": "array",
+        "title": "Issues",
+        "description": "Each issue has severity, schema type, field, message and a recommendation."
+      },
+      "checkedAt": {
+        "type": "string",
+        "title": "Checked at",
+        "description": "ISO 8601 timestamp of the check.",
+        "example": "2026-09-11T06:00:00+00:00"
+      }
+    },
+    "required": ["url", "grade", "score"]
+  },
   "views": {
     "overview": {
       "title": "Overview",
