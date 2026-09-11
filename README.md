@@ -23,6 +23,72 @@
 
 评分：`100 - error×15 - warning×5`，下限 0。页面完全没有 JSON-LD 直接判 0 分 F。
 
+## 示例输出
+
+一个合格的 Product 页（grade A）与一个不合格的（grade F，price 写成 `"$29.99"` 且缺 image）：
+
+```json
+{
+  "url": "https://shop.example.com/product/widget",
+  "finalUrl": "https://shop.example.com/product/widget",
+  "httpStatus": 200,
+  "jsonLdBlockCount": 1,
+  "types": ["Product", "Brand", "Offer"],
+  "issues": [
+    {
+      "severity": "warning",
+      "type": "Product",
+      "field": "aggregateRating",
+      "message": "Missing recommended field 'aggregateRating'",
+      "recommendation": "Add 'aggregateRating' to improve how Product renders"
+    },
+    {
+      "severity": "warning",
+      "type": "Product",
+      "field": "description",
+      "message": "Missing recommended field 'description'",
+      "recommendation": "Add 'description' to improve how Product renders"
+    }
+  ],
+  "errorCount": 0,
+  "warningCount": 2,
+  "score": 90,
+  "grade": "A"
+}
+```
+
+```json
+{
+  "url": "https://shop.example.com/product/other",
+  "finalUrl": "https://shop.example.com/product/other",
+  "httpStatus": 200,
+  "jsonLdBlockCount": 1,
+  "types": ["Product", "Offer"],
+  "issues": [
+    {
+      "severity": "error",
+      "type": "Product",
+      "field": "image",
+      "message": "Missing required field 'image'",
+      "recommendation": "Add 'image' - required for Product to be eligible for rich results"
+    },
+    {
+      "severity": "warning",
+      "type": "Product",
+      "field": "brand",
+      "message": "Missing recommended field 'brand'",
+      "recommendation": "Add 'brand' to improve how Product renders"
+    }
+  ],
+  "errorCount": 3,
+  "warningCount": 5,
+  "score": 30,
+  "grade": "F"
+}
+```
+
+导出格式：JSON / CSV / Excel / XML / RSS / HTML，Apify dataset 原生支持。
+
 **severity 的含义**
 - `error` —— 缺 Google 要求的必填字段，rich result 根本出不来。
   例：`Product` 缺 `image`；`offers.price` 写成 `"$29.99"`（必须是裸数字）；`offers` 缺 `priceCurrency`
@@ -57,16 +123,32 @@ python src/smoke.py https://example.com https://your-site.com
 
 ## 部署到 Apify
 
+方式一：官方 CLI
+
 ```bash
-pip install apify-cli
+npm install -g apify-cli
 apify login
 apify push
 ```
 
+方式二：免装 CLI，直接用 REST API（纯标准库，无依赖）
+
+```bash
+export APIFY_TOKEN=apify_api_xxxxxxxxxxxx
+python tools/push_via_api.py        # 先加 --dry-run 看会传哪些文件
+```
+
+token 在 Console → Settings → API & Integrations → Personal API tokens 里生成。
+脚本会把 8 个项目文件打包成 SOURCE_FILES 版本上传，并打上 latest 构建标签。
+（注意：Apify 只认 `Authorization: Bearer` header，query 参数 `?token=` 已失效。）
+
 首次 push 后去 Console 的 Publication 页做三件事：
 
 1. **完成 KYC**（身份证 + 地址证明 + 税务文件 + UBO）。
-   ⚠️ 余额因 KYC 未完成被搁置连续满 12 个月会被平台没收，注册完就先做掉
+   没有独立设置页，入口在 **Billing → Payout method**（配置收款时触发），
+   或 Development → Insights → Payouts。
+   ⚠️ 余额因 KYC 未完成被搁置连续满 12 个月会被平台没收；
+   KYC 未通过前不发放任何付款，所以尽早提交
 2. **配置 pay-per-event**：primary event 选 `apify-default-dataset-item`
    （每条结果计费，零代码）。参考价 Bronze $0.02 / 条，Silver 低 10%，Gold 低 20%。
    免费档定价不要激进——那是获客漏斗，不是收入来源
