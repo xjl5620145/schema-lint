@@ -1,0 +1,31 @@
+{
+  "actorSpecification": 1,
+  "name": "schema-lint",
+  "title": "Schema.org & JSON-LD Validator",
+  "description": "Extract and validate structured data (JSON-LD) from any URL in bulk. Reports missing fields Google requires for rich results, plus a 0-100 score per page.",
+  "version": "0.1",
+  "input": "./input_schema.json",
+  "dockerfile": "./Dockerfile",
+  "storages": {
+    "dataset": {
+      "actorSpecification": 1,
+      "views": {
+        "overview": {
+          "title": "Overview",
+          "transformation": {
+            "fields": [
+              "url",
+              "httpStatus",
+              "grade",
+              "score",
+              "types",
+              "errorCount",
+              "warningCount",
+              "finalUrl"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

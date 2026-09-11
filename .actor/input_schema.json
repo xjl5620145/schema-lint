@@ -1,0 +1,40 @@
+{
+  "title": "Schema.org / JSON-LD Validator",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "urls": {
+      "title": "URLs to check",
+      "type": "array",
+      "description": "One URL per row. Redirects are followed automatically and the final URL is reported back.",
+      "editor": "stringList",
+      "default": ["https://example.com"]
+    },
+    "maxConcurrency": {
+      "title": "Max concurrency",
+      "type": "integer",
+      "description": "How many pages to fetch in parallel. Keep it low to stay polite to target sites.",
+      "editor": "number",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 20
+    },
+    "timeoutMs": {
+      "title": "Request timeout (ms)",
+      "type": "integer",
+      "description": "Per-request timeout. Slow marketing sites sometimes need 30s.",
+      "editor": "number",
+      "default": 20000,
+      "minimum": 1000,
+      "maximum": 120000
+    },
+    "includeRawBlocks": {
+      "title": "Include raw JSON-LD blocks",
+      "type": "boolean",
+      "description": "Attach the parsed JSON-LD blocks to each result. Makes output much larger.",
+      "editor": "boolean",
+      "default": false
+    }
+  },
+  "required": ["urls"]
+}
