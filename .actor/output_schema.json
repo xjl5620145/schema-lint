@@ -1,0 +1,13 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Schema Validation Results",
+  "description": "Per-URL structured data validation results, one dataset item per checked URL.",
+  "properties": {
+    "results": {
+      "type": "string",
+      "title": "Results",
+      "description": "Dataset containing one validation report (grade, score, issues, schema types) per URL.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items"
+    }
+  }
+}
