@@ -23,6 +23,17 @@
 
 评分：`100 - error×15 - warning×5`，下限 0。页面完全没有 JSON-LD 直接判 0 分 F。
 
+## 实测结果（Apify 云端真实运行）
+
+```
+https://example.com       http=200  grade=F  score=0    blocks=0  E=1  W=0
+    types=[]                                        <- 整页没有 JSON-LD，判定正确
+https://shopify.com       http=200  grade=A  score=100  blocks=1  E=0  W=0
+    types=[Corporation, ContactPoint]
+https://www.theverge.com  http=200  grade=A  score=95   blocks=2  E=0  W=1
+    types=[NewsMediaOrganization, ImageObject, Person, Thing, WebSite, SearchAction, EntryPoint]
+```
+
 ## 示例输出
 
 一个合格的 Product 页（grade A）与一个不合格的（grade F，price 写成 `"$29.99"` 且缺 image）：
@@ -156,6 +167,24 @@ token 在 Console → Settings → API & Integrations → Personal API tokens �
 3. **填 README 和示例输出**，Store 页面的质量分影响排序
 
 ---
+
+## 为什么不依赖 apify SDK
+
+`apify` SDK 会拉进 `crawlee`，它在 `apify/actor-python:3.13` 镜像里和较新的 pydantic 冲突：
+
+```
+TypeError: cannot specify both default and default_factory
+```
+
+构建能过、运行时才崩，很难查。而我们只用到三件事，各一次 HTTP 调用就够：
+
+| 能力 | 实现 |
+|---|---|
+| 读 input | `GET /v2/key-value-stores/{storeId}/records/{inputKey}` |
+| 写结果 | `POST /v2/datasets/{datasetId}/items` |
+| 日志 | 直接 `print()`，Apify 捕获 stdout |
+
+所以 `requirements.txt` 里只有 `httpx` 一行。依赖越少，构建越不容易挂。
 
 ## 已知边界（诚实说明）
 

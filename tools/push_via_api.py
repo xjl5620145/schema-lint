@@ -93,7 +93,7 @@ def create_actor(token):
         "isPublic": False,
         "isAnonymouslyRunnable": False,
     }
-    status, data = request("POST", "/acts", token)
+    status, data = request("POST", "/acts", token, payload)
     if status in (200, 201):
         return data.get("data"), None
     return None, f"HTTP {status}: {data}"
@@ -147,7 +147,17 @@ def main():
         print(f"ERROR uploading version (HTTP {status}): {json.dumps(data, ensure_ascii=False)[:600]}")
         return 1
 
-    print("Version uploaded. Apify is building the Docker image now (1-3 min).")
+    # NOTE: the build endpoint wants the version as a QUERY param, not in the body.
+    # Sending {"version": "0.1"} in JSON returns 400 'Property "version" must be a string'.
+    status, build = request("POST", f"/acts/{actor_id}/builds?version={VERSION}&tag=latest", token)
+    if status in (200, 201):
+        print(f"Build queued: {build.get('data', {}).get('buildNumber')} "
+              f"(status {build.get('data', {}).get('status')})")
+    else:
+        print(f"WARNING: could not queue build (HTTP {status}). "
+              f"Start it manually from the Console's Build tab.")
+
+    print("Docker image is building now (1-3 min).")
     print(f"\nOpen: https://console.apify.com/actors/{actor_id}")
     print("Then: Input tab -> paste a URL -> Start -> check the Output tab")
     return 0

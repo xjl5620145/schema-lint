@@ -32,7 +32,7 @@
       "title": "Include raw JSON-LD blocks",
       "type": "boolean",
       "description": "Attach the parsed JSON-LD blocks to each result. Makes output much larger.",
-      "editor": "boolean",
+      "editor": "checkbox",
       "default": false
     }
   },
