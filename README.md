@@ -1,5 +1,7 @@
 # schema-lint
 
+**已上线 Apify Store：https://apify.com/xj1/schema-lint**
+
 批量提取并校验任意页面的 Schema.org / JSON-LD 结构化数据，按 Google rich results 的要求
 报出缺失字段，并给出 0–100 的评分。
 
