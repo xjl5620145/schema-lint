@@ -1,0 +1,57 @@
+{
+  "actorSpecification": 1,
+  "views": {
+    "overview": {
+      "title": "Overview",
+      "transformation": {
+        "fields": [
+          "url",
+          "httpStatus",
+          "grade",
+          "score",
+          "errorCount",
+          "warningCount",
+          "types",
+          "finalUrl"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "url": {
+            "label": "URL",
+            "format": "link"
+          },
+          "httpStatus": {
+            "label": "HTTP",
+            "format": "number"
+          },
+          "grade": {
+            "label": "Grade",
+            "format": "text"
+          },
+          "score": {
+            "label": "Score",
+            "format": "number"
+          },
+          "errorCount": {
+            "label": "Errors",
+            "format": "number"
+          },
+          "warningCount": {
+            "label": "Warnings",
+            "format": "number"
+          },
+          "types": {
+            "label": "Schema types",
+            "format": "json"
+          },
+          "finalUrl": {
+            "label": "Final URL",
+            "format": "link"
+          }
+        }
+      }
+    }
+  }
+}
